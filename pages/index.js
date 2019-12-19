@@ -1,5 +1,6 @@
 import React from 'react'
-
+import Link from 'next/link';
+import Error from 'next/error';
 import Contentful from '../core/contentful';
 import {
     Layout,
@@ -23,37 +24,49 @@ const Tile = ({ field }) => (
     </div>
 )
 
-const Home = ({ page }) => (
-    <Layout title={page.fields.title}>
-        <Hero field={page.fields.heroImage} title={page.fields.title} />
-        <div className="tiles">
-            {page.fields.tiles.map((field) => (
-                <Tile key={field.sys.id} field={field} />
-            ))}
-        </div>
-        <style jsx>{`
-            .tiles {
-                display: flex;
-                margin-bottom: 50px;
-                margin-right: -25px;
-                align-items: flex-end;
-            }`}
-        </style>
-        <RichText document={page.fields.body} />
-    </Layout>
-);
+const Home = ({ page }) => {
+    if (!page) if (!page)  return <Error statusCode={404} />;
+
+    return (
+        <Layout title={page.fields.title}>
+            <Hero field={page.fields.heroImage} title={page.fields.title} />
+            <div className="tiles">
+                {page.fields.tiles.map((field) => (
+                    <Tile key={field.sys.id} field={field} />
+                ))}
+            </div>
+            <Link href="/page/ho8ashoahds">
+                <a>
+                    Broken Link
+                </a>
+            </Link>
+            <style jsx>{`
+                .tiles {
+                    display: flex;
+                    margin-bottom: 50px;
+                    margin-right: -25px;
+                    align-items: flex-end;
+                }`}
+            </style>
+            <RichText document={page.fields.body} />
+        </Layout>
+    );
+};
 
 Home.getInitialProps = async ({ req }) => {
 
     // load welcome page.
-    const welcome = await Contentful.getEntries({
-        'content_type': 'welcomePage'
-    });
-
-    // todo: handle a situation where the page can't be found
+    let welcome;
+    try {
+        welcome = await Contentful.getEntries({
+            'content_type': 'welcomePage'
+        });
+    } catch(e) {
+        console.log('Unable to load welcome page', e.message);
+    }
 
     return {
-        page: welcome.items[0],
+        page: welcome && welcome.items.length ? welcome.items[0] : null,
     };
 };
 

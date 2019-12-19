@@ -10,17 +10,7 @@ import {
 } from '../../components';
 
 const Page = ({ page }) => {
-    if (!page) {
-        // render a 404 if this is a react render
-        if (process.browser) {
-            return <Error statusCode={404} />
-        }
-
-        // trigger next.js's 404 rendering if this is SSR
-        const e = new Error("Page not found");
-        e.code = "ENOENT";  // Triggers a 404
-        throw e;
-    }
+    if (!page)  return <Error statusCode={404} />;
     return (
         <Layout title={page.fields.title}>
             <Link href="/"><a className="back">&lt; Home</a></Link>
