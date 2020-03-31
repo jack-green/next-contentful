@@ -11,7 +11,7 @@
     "@contentful/rich-text-react-renderer": "^13.4.0",
     "contentful": "^7.11.1",
     "dotenv": "^8.2.0",
-    "next": "9.1.6",
+    "next": "9.3.2",
     "next-redux-wrapper": "^4.0.1",
     "react": "16.12.0",
     "react-dom": "16.12.0",
